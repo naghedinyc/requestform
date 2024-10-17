@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Form</title>
+    <script>
+        function downloadCSV() {
+            // Gather form data
+            const additionalData = document.getElementById('data').value;
+            const quantity = document.getElementById('quantity').value;
+            const summary = document.getElementById('summary').value;
+
+            // Create CSV content
+            const csvContent = [
+                ['Timestamp', 'Additional Data', 'Quantity', 'Summary'],
+                [new Date().toLocaleString(), additionalData, quantity, summary]
+            ].map(row => row.join(",")).join("\n");
+
+            // Create a blob and a link to download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "order_request.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</head>
+<body>
+    <h1>Order Request</h1>
+    <img src="https://naghedi.s3.amazonaws.com/2024HolidayResort/Havana_Clutch_Striped_Fiji_SN0192D_Main.jpg" alt="Product Image" style="max-width:300px;">
+    <form id="orderForm">
+        <label for="data">Additional Data:</label>
+        <input type="text" id="data" name="data" required>
+        <br><br>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required>
+        <br><br>
+        <label for="summary">Summary:</label>
+        <textarea id="summary" name="summary"></textarea>
+        <br><br>
+        <button type="button" onclick="downloadCSV()">Download CSV</button>
+    </form>
+</body>
+</html>
